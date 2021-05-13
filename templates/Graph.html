@@ -1,0 +1,95 @@
+{% extends "Index.html" %}
+{%block title%}Graph{% endblock %}
+{%block content%}
+<head>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
+<script id="arr-ddate" type="application/json">
+    
+    {{ddate}}
+  </script>
+  <script id="arr-dataOpen" type="application/json">
+    {{dataOpen}}
+  </script>
+  <script id="arr-dataClose" type="application/json">
+    {{dataClose}}
+  </script>
+  <script id="arr-dataHigh" type="application/json">
+    {{dataHigh}}
+  </script>
+  <script id="arr-dataLow" type="application/json">
+    {{dataLow}}
+  </script>
+  <script id="arr-stkName" type="application/json">
+    
+    {{stockName}}
+  </script>
+<script type="text/javascript">
+window.onload = function () {
+  var ddate = document.getElementById('arr-ddate').textContent.trim()
+  var dataOpen = document.getElementById('arr-dataOpen').textContent.trim()
+  var dataClose = document.getElementById('arr-dataClose').textContent.trim()
+  var dataHigh = document.getElementById('arr-dataHigh').textContent.trim()
+  var dataLow = document.getElementById('arr-dataLow').textContent.trim()
+  var stockName = document.getElementById('arr-stkName').textContent.trim()
+  
+  dataOpen = dataOpen.replace('[','').replace(']','').split(",")
+  dataClose = dataClose.replace('[','').replace(']','').split(",")
+  dataHigh = dataHigh.replace('[','').replace(']','').split(",")
+  dataLow = dataLow.replace('[','').replace(']','').split(",")
+  ddate = ddate.replace('[','').replace(']','').replaceAll('&#39;','').split(",")
+  
+  var dps1 = [], dps2= [];
+  var stockChart = new CanvasJS.StockChart("chartContainer",{
+    theme: "light2",
+    exportEnabled: true,
+    title:{
+      text: "StockChart of "+stockName
+    },
+    subtitles: [{
+      text: 'in US Dollars'
+    }],
+    charts: [{
+      axisX: {
+        crosshair: {
+          enabled: true,
+          snapToDataPoint: true
+        }
+      },
+      axisY: {
+        prefix: "$"
+      },
+      data: [{
+        type: "candlestick",
+        yValueFormatString: "$#,###.##",
+        dataPoints : dps1
+      }]
+    }],
+    navigator: {
+      data: [{
+        dataPoints: dps2
+      }],
+      slider: {
+        minimum: new Date(2018, 04, 01),
+        maximum: new Date(2018, 06, 01)
+      }
+    }
+  });
+  
+  function show(){
+    for(var i = 0; i < ddate.length; i++){
+      dps1.push({x: new Date(ddate[i]), y: [Number(dataOpen[i]), Number(dataHigh[i]), Number(dataLow[i]), Number(dataClose[i])]});
+      dps2.push({x: new Date(ddate[i]), y: Number(dataClose[i])});
+    }
+    stockChart.render();
+  };
+  show();
+}
+</script>
+</head>
+<body>
+<br>
+<br>
+<div id="chartContainer" style="height: 450px; width: 100%;"></div>
+
+{%endblock%}

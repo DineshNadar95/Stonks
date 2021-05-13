@@ -1,0 +1,37 @@
+{% extends "Index.html" %}
+{%block title%}Stock{% endblock %}
+{%block content%}
+<div align="center" style="margin-top: 1%;
+  padding: 10px;
+<div class="card" align="center" >
+
+    
+<div>
+<div class="container">
+    <div class="card flex-row flex-wrap">
+        <div class="card-header border-0">
+            <img src={{content.logo_url}} alt="">
+            
+        </div>
+        <div class="card-header border-0" style="font-size: 72px;
+            background: -webkit-linear-gradient(#7CB9E8, #7FFFD4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family:'Lucida Console';
+            font-weight: 1000;">
+            Market Value : {{content.regularMarketPrice}}
+        </div>
+        <div class="card-block px-2">
+            <h4 class="card-title">{{content.shortName}}</h4>
+            <p class="card-text">{{content.longBusinessSummary}}</p>
+            <a href="/graph/{{content.symbol}}" class="btn btn-primary">Graph</a>
+            <a href={{content.website}} class="btn btn-primary">Website</a>
+        </div>
+        <div class="w-100"></div>
+        <div class="card-footer w-100 text-muted">
+            Market Value : {{content.regularMarketPrice}}
+        </div>
+    </div>    
+    </div>
+</div>
+{%endblock%}
